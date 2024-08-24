@@ -2,25 +2,34 @@
 
 namespace TomatoPHP\FilamentArtisan\Pages;
 
-use Filament\Actions\Action;
-use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Components\TagsInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Notifications\Notification;
-use Filament\Pages\Page;
-use Filament\Panel;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Table;
 use Illuminate\Support\Facades\App;
 use Symfony\Component\Console\Output\BufferedOutput;
 use TomatoPHP\FilamentArtisan\Http\Controllers\GuiController;
 use TomatoPHP\FilamentArtisan\Models\Command;
 use TomatoPHP\FilamentDeveloperGate\Http\Middleware\DeveloperGateMiddleware;
+
+use Filament\Actions\{
+    Concerns\InteractsWithActions,
+    Contracts\HasActions,
+    Action
+};
+use Filament\Forms\Components\{
+    TagsInput,
+    Textarea,
+    TextInput
+};
+use Filament\Tables\{
+    Columns\TextColumn,
+    Concerns\InteractsWithTable,
+    Contracts\HasTable,
+    Filters\SelectFilter,
+    Table
+};
+use Filament\{
+    Notifications\Notification,
+    Pages\Page,
+    Panel
+};
 
 class Artisan extends Page implements HasTable, HasActions
 {
@@ -113,12 +122,15 @@ class Artisan extends Page implements HasTable, HasActions
                 $commandArguments = $arguments['item']['arguments'] != 'null' ? json_decode($arguments['item']['arguments']) : [];
                 $commandOptions = $arguments['item']['options'] != 'null' ? json_decode($arguments['item']['options']) : [];
                 $formBuild = [];
-                foreach ($commandArguments as $arg) {
-                    $formBuild[] = $arg;
+                if ($commandArguments != null) {
+                    foreach ($commandArguments as $arg) {
+                        $formBuild[] = $arg;
+                    }
                 }
-                foreach ($commandOptions as $opt) {
-                    $opt->required = false;
-                    $formBuild[] = $opt;
+                if ($commandOptions != null) {
+                    foreach ($commandOptions as $opt) {
+                        $formBuild[] = $opt;
+                    }
                 }
 
                 foreach ($formBuild as $formItem) {
